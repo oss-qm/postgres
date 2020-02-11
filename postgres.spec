@@ -30,7 +30,7 @@
 %global pkg_xml			%pkg_main-xml
 
 %global pg_version_major	12
-%global pg_version_minor	2
+%global pg_version_minor	3
 %global pg_version_prev		11
 
 %global pg_alternative_prio	%{pg_version_major}00
@@ -135,7 +135,7 @@
 
 Name:		postgres
 Version:	%pg_version_major.%pg_version_minor
-Release:	mtx.8
+Release:	mtx.1
 License:	PostgreSQL
 Url:		https://www.postgresql.org/
 Summary:	PostgreSQL client programs and libraries
