@@ -42,3 +42,8 @@ lib*.pc
 /Debug/
 /Release/
 /tmp_install/
+/configure
+/autom4te.cache/
+/src/include/pg_config.h.in~
+/config/ltmain.sh
+/aclocal.m4
