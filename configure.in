@@ -926,20 +926,7 @@ PGAC_ARG_BOOL(with, libxml, no, [build with XML support],
               [AC_DEFINE([USE_LIBXML], 1, [Define to 1 to build with XML support. (--with-libxml)])])
 
 if test "$with_libxml" = yes ; then
-  PGAC_PATH_PROGS(XML2_CONFIG, xml2-config)
-  AC_ARG_VAR(XML2_CONFIG, [path to xml2-config utility])dnl
-  if test -n "$XML2_CONFIG"; then
-    for pgac_option in `$XML2_CONFIG --cflags`; do
-      case $pgac_option in
-        -I*|-D*) CPPFLAGS="$CPPFLAGS $pgac_option";;
-      esac
-    done
-    for pgac_option in `$XML2_CONFIG --libs`; do
-      case $pgac_option in
-        -L*) LDFLAGS="$LDFLAGS $pgac_option";;
-      esac
-    done
-  fi
+  PKG_CHECK_MODULES(XML2, libxml-2.0 >= 2.6.23)
 fi
 
 AC_SUBST(with_libxml)
@@ -1240,10 +1227,6 @@ if test "$with_pam" = yes ; then
   AC_CHECK_LIB(pam,    pam_start, [], [AC_MSG_ERROR([library 'pam' is required for PAM])])
 fi
 
-if test "$with_libxml" = yes ; then
-  AC_CHECK_LIB(xml2, xmlSaveToBuffer, [], [AC_MSG_ERROR([library 'xml2' (version >= 2.6.23) is required for XML support])])
-fi
-
 if test "$with_libxslt" = yes ; then
   AC_CHECK_LIB(xslt, xsltCleanupGlobals, [], [AC_MSG_ERROR([library 'xslt' is required for XSLT support])])
 fi
@@ -1426,10 +1409,6 @@ fi
 
 if test "$with_systemd" = yes ; then
   AC_CHECK_HEADER(systemd/sd-daemon.h, [], [AC_MSG_ERROR([header file <systemd/sd-daemon.h> is required for systemd support])])
-fi
-
-if test "$with_libxml" = yes ; then
-  AC_CHECK_HEADER(libxml/parser.h, [], [AC_MSG_ERROR([header file <libxml/parser.h> is required for XML support])])
 fi
 
 if test "$with_libxslt" = yes ; then
