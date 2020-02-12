@@ -933,32 +933,7 @@ AC_MSG_RESULT([$with_libxml])
 AC_SUBST(with_libxml)
 
 if test "$with_libxml" = yes ; then
-  # Check pkg-config, then xml2-config.  But for backwards compatibility,
-  # setting XML2_CONFIG overrides pkg-config.
-  AC_ARG_VAR(XML2_CONFIG, [path to xml2-config utility])dnl
-  have_libxml2_pkg_config=no
-  if test -z "$XML2_CONFIG" -a -n "$PKG_CONFIG"; then
-    PKG_CHECK_MODULES(XML2, [libxml-2.0 >= 2.6.23],
-                      [have_libxml2_pkg_config=yes], [# do nothing])
-  fi
-  if test "$have_libxml2_pkg_config" = no ; then
-    PGAC_PATH_PROGS(XML2_CONFIG, xml2-config)
-    if test -n "$XML2_CONFIG"; then
-      XML2_CFLAGS=`$XML2_CONFIG --cflags`
-      XML2_LIBS=`$XML2_CONFIG --libs`
-    fi
-  fi
-  # Note the user could also set XML2_CFLAGS/XML2_LIBS directly
-  for pgac_option in $XML2_CFLAGS; do
-    case $pgac_option in
-      -I*|-D*) CPPFLAGS="$CPPFLAGS $pgac_option";;
-    esac
-  done
-  for pgac_option in $XML2_LIBS; do
-    case $pgac_option in
-      -L*) LDFLAGS="$LDFLAGS $pgac_option";;
-    esac
-  done
+  PKG_CHECK_MODULES(XML2, libxml-2.0 >= 2.6.23)
 fi
 
 
@@ -1258,10 +1233,6 @@ if test "$with_pam" = yes ; then
   AC_CHECK_LIB(pam,    pam_start, [], [AC_MSG_ERROR([library 'pam' is required for PAM])])
 fi
 
-if test "$with_libxml" = yes ; then
-  AC_CHECK_LIB(xml2, xmlSaveToBuffer, [], [AC_MSG_ERROR([library 'xml2' (version >= 2.6.23) is required for XML support])])
-fi
-
 if test "$with_libxslt" = yes ; then
   AC_CHECK_LIB(xslt, xsltCleanupGlobals, [], [AC_MSG_ERROR([library 'xslt' is required for XSLT support])])
 fi
@@ -1444,10 +1415,6 @@ fi
 
 if test "$with_systemd" = yes ; then
   AC_CHECK_HEADER(systemd/sd-daemon.h, [], [AC_MSG_ERROR([header file <systemd/sd-daemon.h> is required for systemd support])])
-fi
-
-if test "$with_libxml" = yes ; then
-  AC_CHECK_HEADER(libxml/parser.h, [], [AC_MSG_ERROR([header file <libxml/parser.h> is required for XML support])])
 fi
 
 if test "$with_libxslt" = yes ; then
